@@ -1,7 +1,7 @@
 {
   "name": "chartjs-plugin-annotation-sifex",
   "description": "Annotations for Chart.js",
-  "version": "0.5.4-sifex",
+  "version": "0.5.5-sifex",
   "author": "Evert Timberg <evert.timberg@gmail.com>",
   "license": "MIT",
   "main": "src/index.js",
