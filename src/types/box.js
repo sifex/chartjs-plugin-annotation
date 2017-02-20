@@ -1,7 +1,7 @@
 // Box Annotation implementation
 module.exports = function(Chart) {
 	var helpers = require('../helpers.js')(Chart);
-	
+
 	var BoxAnnotation = Chart.Annotation.Element.extend({
 		setDataLimits: function() {
 			var model = this._model;
@@ -52,16 +52,22 @@ module.exports = function(Chart) {
 				y2: chartArea.bottom
 			};
 
-			var left = chartArea.left, 
-				top = chartArea.top, 
-				right = chartArea.right, 
+			var left = chartArea.left,
+				top = chartArea.top,
+				right = chartArea.right,
 				bottom = chartArea.bottom;
 
 			var min, max;
 
 			if (xScale) {
 				min = helpers.isValid(options.xMin) ? xScale.getPixelForValue(options.xMin) : chartArea.left;
+				if(min == NaN) {
+					min = chartArea.left;
+				}
 				max = helpers.isValid(options.xMax) ? xScale.getPixelForValue(options.xMax) : chartArea.right;
+				if(max == NaN) {
+					max = chartArea.right;
+				}
 				left = Math.min(min, max);
 				right = Math.max(min, max);
 			}
@@ -87,9 +93,9 @@ module.exports = function(Chart) {
 		inRange: function(mouseX, mouseY) {
 			var model = this._model;
 			return model &&
-				mouseX >= model.left && 
-				mouseX <= model.right && 
-				mouseY >= model.top && 
+				mouseX >= model.left &&
+				mouseX <= model.right &&
+				mouseY >= model.top &&
 				mouseY <= model.bottom;
 		},
 		getCenterPoint: function() {

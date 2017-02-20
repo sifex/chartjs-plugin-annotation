@@ -1,13 +1,13 @@
 {
-  "name": "chartjs-plugin-annotation",
+  "name": "chartjs-plugin-annotation-sifex",
   "description": "Annotations for Chart.js",
-  "version": "0.5.3",
+  "version": "0.5.4-sifex",
   "author": "Evert Timberg <evert.timberg@gmail.com>",
   "license": "MIT",
   "main": "src/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/chartjs/chartjs-plugin-annotation.git"
+    "url": "https://github.com/sifex/chartjs-plugin-annotation.git"
   },
   "devDependencies": {
     "browserify": "^13.0.0",
