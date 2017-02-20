@@ -1,7 +1,7 @@
 /*!
  * chartjs-plugin-annotation.js
  * http://chartjs.org/
- * Version: 0.5.4-sifex
+ * Version: 0.5.5-sifex
  *
  * Copyright 2016 Evert Timberg
  * Released under the MIT license
@@ -555,11 +555,11 @@ module.exports = function(Chart) {
 
 			if (xScale) {
 				min = helpers.isValid(options.xMin) ? xScale.getPixelForValue(options.xMin) : chartArea.left;
-				if(min == NaN) {
+				if(isNaN(min)) {
 					min = chartArea.left;
 				}
 				max = helpers.isValid(options.xMax) ? xScale.getPixelForValue(options.xMax) : chartArea.right;
-				if(max == NaN) {
+				if(isNaN(max)) {
 					max = chartArea.right;
 				}
 				left = Math.min(min, max);
