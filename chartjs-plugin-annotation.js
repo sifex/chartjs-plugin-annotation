@@ -1,7 +1,7 @@
 /*!
  * chartjs-plugin-annotation.js
  * http://chartjs.org/
- * Version: 0.5.5-sifex
+ * Version: 0.5.4
  *
  * Copyright 2016 Evert Timberg
  * Released under the MIT license
@@ -495,7 +495,7 @@ Chart.pluginService.register(annotationPlugin);
 // Box Annotation implementation
 module.exports = function(Chart) {
 	var helpers = require('../helpers.js')(Chart);
-
+	
 	var BoxAnnotation = Chart.Annotation.Element.extend({
 		setDataLimits: function() {
 			var model = this._model;
@@ -546,22 +546,16 @@ module.exports = function(Chart) {
 				y2: chartArea.bottom
 			};
 
-			var left = chartArea.left,
-				top = chartArea.top,
-				right = chartArea.right,
+			var left = chartArea.left, 
+				top = chartArea.top, 
+				right = chartArea.right, 
 				bottom = chartArea.bottom;
 
 			var min, max;
 
 			if (xScale) {
 				min = helpers.isValid(options.xMin) ? xScale.getPixelForValue(options.xMin) : chartArea.left;
-				if(isNaN(min)) {
-					min = chartArea.left;
-				}
 				max = helpers.isValid(options.xMax) ? xScale.getPixelForValue(options.xMax) : chartArea.right;
-				if(isNaN(max)) {
-					max = chartArea.right;
-				}
 				left = Math.min(min, max);
 				right = Math.max(min, max);
 			}
@@ -587,9 +581,9 @@ module.exports = function(Chart) {
 		inRange: function(mouseX, mouseY) {
 			var model = this._model;
 			return model &&
-				mouseX >= model.left &&
-				mouseX <= model.right &&
-				mouseY >= model.top &&
+				mouseX >= model.left && 
+				mouseX <= model.right && 
+				mouseY >= model.top && 
 				mouseY <= model.bottom;
 		},
 		getCenterPoint: function() {
@@ -668,8 +662,13 @@ module.exports = function(Chart) {
 			var scale = chartInstance.scales[options.scaleID];
 			var pixel, endPixel;
 			if (scale) {
-				pixel = helpers.isValid(options.value) ? scale.getPixelForValue(options.value) : NaN;
-				endPixel = helpers.isValid(options.endValue) ? scale.getPixelForValue(options.endValue) : pixel;
+				if (options.useTicks) {
+					pixel = helpers.isValid(options.value) ? scale.getPixelForTick(options.value) : NaN;
+					endPixel = helpers.isValid(options.endValue) ? scale.getPixelForTick(options.endValue) : pixel;
+				} else {
+					pixel = helpers.isValid(options.value) ? scale.getPixelForValue(options.value) : NaN;
+					endPixel = helpers.isValid(options.endValue) ? scale.getPixelForValue(options.endValue) : pixel;
+				}
 			}
 
 			if (isNaN(pixel)) {
@@ -752,7 +751,7 @@ module.exports = function(Chart) {
 		draw: function() {
 			var view = this._view;
 			var ctx = this.chartInstance.chart.ctx;
-			
+
 			if (!view.clip) {
 				return;
 			}
@@ -839,7 +838,7 @@ module.exports = function(Chart) {
 			var dy = this.getY(x),
 				dx = this.getX(y);
 			return (
-				(!isFinite(dy) || Math.abs(y - dy) < epsilon) && 
+				(!isFinite(dy) || Math.abs(y - dy) < epsilon) &&
 				(!isFinite(dx) || Math.abs(x - dx) < epsilon)
 			);
 		};
@@ -857,7 +856,7 @@ module.exports = function(Chart) {
 				ret.y = view.y1 + ya;
 				ret.x = (isFinite(line.m) ? line.getY(ret.y) : view.x1) - xa;
 			break;
-			
+
 			// bottom align
 			case view.mode == verticalKeyword && view.labelPosition == "bottom":
 				ya = height + padHeight + view.labelYAdjust;
@@ -865,7 +864,7 @@ module.exports = function(Chart) {
 				ret.y = view.y2 - ya;
 				ret.x = (isFinite(line.m) ? line.getX(ret.y) : view.x1) - xa;
 			break;
-			
+
 			// left align
 			case view.mode == horizontalKeyword && view.labelPosition == "left":
 				xa = padWidth + view.labelXAdjust;
@@ -873,7 +872,7 @@ module.exports = function(Chart) {
 				ret.x = view.x1 + xa;
 				ret.y = line.getY(ret.x) + ya;
 			break;
-			
+
 			// right align
 			case view.mode == horizontalKeyword && view.labelPosition == "right":
 				xa = width + padWidth + view.labelXAdjust;
