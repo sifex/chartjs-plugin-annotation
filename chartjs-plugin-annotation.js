@@ -62,7 +62,7 @@ module.exports = function(Chart) {
 			// Add new elements, or update existing ones
 			ns.options.annotations.forEach(function(annotation) {
 				var id = annotation.id || helpers.objectId();
-				
+
 				// No element with that ID exists, and it's a valid annotation type
 				if (!ns.elements[id] && annotationTypes[annotation.type]) {
 					var cls = annotationTypes[annotation.type];
@@ -130,7 +130,7 @@ module.exports = function(Chart) {
 },{"./events.js":4,"./helpers.js":5}],3:[function(require,module,exports){
 module.exports = function(Chart) {
 	var chartHelpers = Chart.helpers;
-	
+
 	var AnnotationElement = Chart.Element.extend({
 		initialize: function() {
 			this.hidden = false;
@@ -224,7 +224,7 @@ module.exports = function(Chart) {
 		//
 		// 1: wait dblClickSpeed ms, then fire click
 		// 2: cancel (1) if it is waiting then wait dblClickSpeed ms then fire click, else fire click immediately
-		// 3: cancel (1) or (2) if waiting, then fire dblclick 
+		// 3: cancel (1) or (2) if waiting, then fire dblclick
 		if (element && events.indexOf('dblclick') > -1 && typeof options.onDblclick === 'function') {
 			if (e.type === 'click' && typeof options.onClick === 'function') {
 				clearTimeout(element.clickTimeout);
@@ -495,7 +495,7 @@ Chart.pluginService.register(annotationPlugin);
 // Box Annotation implementation
 module.exports = function(Chart) {
 	var helpers = require('../helpers.js')(Chart);
-	
+
 	var BoxAnnotation = Chart.Annotation.Element.extend({
 		setDataLimits: function() {
 			var model = this._model;
@@ -546,16 +546,21 @@ module.exports = function(Chart) {
 				y2: chartArea.bottom
 			};
 
-			var left = chartArea.left, 
-				top = chartArea.top, 
-				right = chartArea.right, 
+			var left = chartArea.left,
+				top = chartArea.top,
+				right = chartArea.right,
 				bottom = chartArea.bottom;
 
 			var min, max;
 
 			if (xScale) {
-				min = helpers.isValid(options.xMin) ? xScale.getPixelForValue(options.xMin) : chartArea.left;
-				max = helpers.isValid(options.xMax) ? xScale.getPixelForValue(options.xMax) : chartArea.right;
+				if (options.useTicks) {
+					min = helpers.isValid(options.xMin) ? xScale.getPixelForTick(options.xMin) : chartArea.left;
+					max = helpers.isValid(options.xMax) ? xScale.getPixelForTick(options.xMax) : chartArea.right;
+				} else {
+					min = helpers.isValid(options.xMin) ? xScale.getPixelForValue(options.xMin) : chartArea.left;
+					max = helpers.isValid(options.xMax) ? xScale.getPixelForValue(options.xMax) : chartArea.right;
+				}
 				left = Math.min(min, max);
 				right = Math.max(min, max);
 			}
@@ -581,9 +586,9 @@ module.exports = function(Chart) {
 		inRange: function(mouseX, mouseY) {
 			var model = this._model;
 			return model &&
-				mouseX >= model.left && 
-				mouseX <= model.right && 
-				mouseY >= model.top && 
+				mouseX >= model.left &&
+				mouseX <= model.right &&
+				mouseY >= model.top &&
 				mouseY <= model.bottom;
 		},
 		getCenterPoint: function() {
